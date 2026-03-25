@@ -1,0 +1,564 @@
+{
+  "info": {
+    "name": "MedSync API",
+    "description": "Medicine Awareness and Safety Application Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Signup",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\",\n  \"full_name\": \"Test User\",\n  \"phone_number\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/signup",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "signup"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set(\"access_token\", jsonData.access_token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Medicines",
+      "item": [
+        {
+          "name": "Create Medicine",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Aspirin\",\n  \"description\": \"Pain reliever\",\n  \"dosage\": \"500\",\n  \"unit\": \"mg\",\n  \"frequency\": \"as needed\",\n  \"form\": \"tablet\",\n  \"manufacturer\": \"Generic Pharma\",\n  \"instructions\": \"Take with food\",\n  \"side_effects\": \"Stomach upset\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/medicines",
+              "host": ["{{base_url}}"],
+              "path": ["medicines"]
+            }
+          }
+        },
+        {
+          "name": "Get All Medicines",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/medicines",
+              "host": ["{{base_url}}"],
+              "path": ["medicines"]
+            }
+          }
+        },
+        {
+          "name": "Get Medicine by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/medicines/:medicine_id",
+              "host": ["{{base_url}}"],
+              "path": ["medicines", ":medicine_id"],
+              "variable": [
+                {
+                  "key": "medicine_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Medicine",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dosage\": \"1000\",\n  \"instructions\": \"Take with plenty of water\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/medicines/:medicine_id",
+              "host": ["{{base_url}}"],
+              "path": ["medicines", ":medicine_id"],
+              "variable": [
+                {
+                  "key": "medicine_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Medicine",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/medicines/:medicine_id",
+              "host": ["{{base_url}}"],
+              "path": ["medicines", ":medicine_id"],
+              "variable": [
+                {
+                  "key": "medicine_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reminders",
+      "item": [
+        {
+          "name": "Create Reminder",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicine_id\": \"<medicine_id>\",\n  \"reminder_times\": [\"08:00\", \"20:00\"],\n  \"frequency\": \"daily\",\n  \"start_date\": \"2024-01-01T00:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reminders",
+              "host": ["{{base_url}}"],
+              "path": ["reminders"]
+            }
+          }
+        },
+        {
+          "name": "Get All Reminders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reminders",
+              "host": ["{{base_url}}"],
+              "path": ["reminders"]
+            }
+          }
+        },
+        {
+          "name": "Update Reminder",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reminder_times\": [\"09:00\", \"21:00\"],\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reminders/:reminder_id",
+              "host": ["{{base_url}}"],
+              "path": ["reminders", ":reminder_id"],
+              "variable": [
+                {
+                  "key": "reminder_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Reminder",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reminders/:reminder_id",
+              "host": ["{{base_url}}"],
+              "path": ["reminders", ":reminder_id"],
+              "variable": [
+                {
+                  "key": "reminder_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Intake Tracking",
+      "item": [
+        {
+          "name": "Create Intake Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicine_id\": \"<medicine_id>\",\n  \"reminder_id\": \"<reminder_id>\",\n  \"scheduled_time\": \"2024-01-01T08:00:00Z\",\n  \"status\": \"taken\",\n  \"notes\": \"Took with breakfast\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/intakes",
+              "host": ["{{base_url}}"],
+              "path": ["intakes"]
+            }
+          }
+        },
+        {
+          "name": "Get Intake Records",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/intakes",
+              "host": ["{{base_url}}"],
+              "path": ["intakes"]
+            }
+          }
+        },
+        {
+          "name": "Update Intake Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"taken\",\n  \"actual_time\": \"2024-01-01T08:15:00Z\",\n  \"notes\": \"Took with water\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/intakes/:intake_id",
+              "host": ["{{base_url}}"],
+              "path": ["intakes", ":intake_id"],
+              "variable": [
+                {
+                  "key": "intake_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Adherence Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/intakes/adherence?days=30",
+              "host": ["{{base_url}}"],
+              "path": ["intakes", "adherence"],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health Records",
+      "item": [
+        {
+          "name": "Create Health Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"allergies\": [\"Penicillin\", \"Peanuts\"],\n  \"existing_conditions\": [\"Hypertension\"],\n  \"blood_type\": \"O+\",\n  \"height\": 175.5,\n  \"weight\": 80.0,\n  \"emergency_notes\": \"Call family at +1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/health-records",
+              "host": ["{{base_url}}"],
+              "path": ["health-records"]
+            }
+          }
+        },
+        {
+          "name": "Get Health Record",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health-records",
+              "host": ["{{base_url}}"],
+              "path": ["health-records"]
+            }
+          }
+        },
+        {
+          "name": "Update Health Record",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"weight\": 78.0,\n  \"existing_conditions\": [\"Hypertension\", \"Type 2 Diabetes\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/health-records",
+              "host": ["{{base_url}}"],
+              "path": ["health-records"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Family Contacts",
+      "item": [
+        {
+          "name": "Create Family Contact",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"relationship\": \"Spouse\",\n  \"phone_number\": \"+1234567890\",\n  \"email\": \"jane.doe@example.com\",\n  \"is_emergency_contact\": true,\n  \"notify_on_missed_dose\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/family-contacts",
+              "host": ["{{base_url}}"],
+              "path": ["family-contacts"]
+            }
+          }
+        },
+        {
+          "name": "Get All Family Contacts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/family-contacts",
+              "host": ["{{base_url}}"],
+              "path": ["family-contacts"]
+            }
+          }
+        },
+        {
+          "name": "Update Family Contact",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone_number\": \"+9876543210\",\n  \"notify_on_missed_dose\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/family-contacts/:contact_id",
+              "host": ["{{base_url}}"],
+              "path": ["family-contacts", ":contact_id"],
+              "variable": [
+                {
+                  "key": "contact_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Family Contact",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/family-contacts/:contact_id",
+              "host": ["{{base_url}}"],
+              "path": ["family-contacts", ":contact_id"],
+              "variable": [
+                {
+                  "key": "contact_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Emergency",
+      "item": [
+        {
+          "name": "Trigger Emergency Alert",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alert_type\": \"medical_emergency\",\n  \"message\": \"Severe allergic reaction - need immediate help\",\n  \"location\": \"Home address\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/emergency/alert",
+              "host": ["{{base_url}}"],
+              "path": ["emergency", "alert"]
+            }
+          }
+        },
+        {
+          "name": "Get Emergency Alerts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/emergency/alerts",
+              "host": ["{{base_url}}"],
+              "path": ["emergency", "alerts"]
+            }
+          }
+        },
+        {
+          "name": "Resolve Emergency Alert",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/emergency/alerts/:alert_id/resolve",
+              "host": ["{{base_url}}"],
+              "path": ["emergency", "alerts", ":alert_id", "resolve"],
+              "variable": [
+                {
+                  "key": "alert_id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
